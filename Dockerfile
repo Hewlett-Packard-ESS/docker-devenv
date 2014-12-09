@@ -16,6 +16,7 @@ RUN yum -y install git-core ruby rubygems ruby-devel make rubygem-nokogiri gcc &
 
 # Configure some npm bits
 RUN npm install -g grunt-cli
+RUN npm install -g jake
 
 # Configure some ruby bits
 ADD .gemrc /root/.gemrc
