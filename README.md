@@ -1,7 +1,6 @@
 # hpess/devenv
 This is a container which has all of the tools required to dev in our environment such as:
-  - Ruby
-  - Rake
+  - Ruby (with Rake, bundler)
   - node.js (with grunt)
 
 It builds on the foundations of hpess/base
