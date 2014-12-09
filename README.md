@@ -18,3 +18,10 @@ fig up
 fig start
 fig stop
 ```
+
+And you'll get:
+```
+HP ESS Development Environment
+Node Version: v0.10.33
+Ruby Version: ruby 2.0.0p353 (2013-11-22) [x86_64-linux]
+```
