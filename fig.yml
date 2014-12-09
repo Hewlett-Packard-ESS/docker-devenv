@@ -1,0 +1,3 @@
+devenv:
+ image: hpess/devenv
+ volums: ./storage:/storage 
