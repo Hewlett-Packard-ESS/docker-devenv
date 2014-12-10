@@ -24,4 +24,4 @@ RUN gem install albacore json net-ssh net-scp bcrypt bundler
 
 # Add the Entrypoint
 ADD devenv.sh /usr/bin/devenv.sh
-ENTRYPOINT ["/usr/bin/devenv.sh"]
+CMD ["/usr/bin/devenv.sh"]
