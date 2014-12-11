@@ -1,23 +1,33 @@
 FROM hpess/base:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
-# Install Git and Ruby
-RUN yum -y install vim git-core ruby rubygems ruby-devel make rubygem-nokogiri gcc && \
+# Install core development tools 
+RUN yum -y install vim git-core build-essential tmux openssh-server && \
     yum -y clean all
 
-# Configure some ruby bits
-ADD .gemrc ~/.gemrc
-RUN gem install albacore json net-ssh net-scp bcrypt bundler
-
-# Install nvm
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.20.0/install.sh | bash
-RUN source ~/.nvm/nvm.sh && nvm install 0.10
-
-# Configure some node bits
-RUN source ~/.bashrc && nvm use 0.10 && npm install -g grunt-cli jake
+# Configure sshd and wemux
+RUN mkdir /var/run/sshd && \
+    ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
+    useradd devenv -G wheel && \
+    echo 'root:password' | chpasswd && \
+    echo 'devenv:devenv' | chpasswd && \
+    echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers && \
+    mkdir -p /home/devenv/.ssh && \ 
+    chown -R devenv:devenv /home/devenv/.ssh && \
+    chmod 700 /home/devenv/.ssh
+ 
+# Install Wemux 
+RUN git clone git://github.com/zolrath/wemux.git /usr/local/share/wemux && \
+    ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux && \
+    cp /usr/local/share/wemux/wemux.conf.example /usr/local/etc/wemux.conf
+ADD wemux.conf /usr/local/etc/wemux.conf
 
 # Configure some other bits
 ADD .vimrc ~/.vimrc
+
+# Add the sshd service
+ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf
+EXPOSE 22
 
 # Add the Entrypoint
 ADD devenv.sh /usr/bin/devenv.sh
