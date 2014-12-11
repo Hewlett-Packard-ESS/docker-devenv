@@ -34,6 +34,7 @@ echo "root:$ROOT_PASSWORD" | chpasswd
 if [ "$#" -eq 0 ]; then
   echo " => You did not specify a command to run, therefore starting supervisor and sshd"
   echo " => You can login via ssh with username: root, password: $ROOT_PASSWORD"
+  echo " => Wemux users can login with username: devenv, password: devenv"
   supervisord -c /etc/supervisord.conf
 else
   echo " => Executing: $*"
