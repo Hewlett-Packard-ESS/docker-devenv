@@ -6,4 +6,11 @@ source ~/.bashrc
 nvm use 0.10
 echo "Now using $(ruby --version)"
 echo "Welcome to the HP ESS Development Environment!"
-/bin/bash
+
+echo $*
+
+if [ "$#" -eq 0 ]; then
+  /bin/bash
+else
+  $*
+fi
