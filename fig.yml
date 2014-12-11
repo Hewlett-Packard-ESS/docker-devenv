@@ -1,0 +1,4 @@
+devenv:
+  image: hpess/devenv
+  ports:
+    - 1337:22

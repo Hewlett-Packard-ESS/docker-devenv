@@ -27,6 +27,7 @@ ADD .vimrc ~/.vimrc
 
 # Add the sshd service
 ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf
+RUN echo "ForceCommand /usr/bin/devenv.sh" >> /etc/ssh/sshd_config
 EXPOSE 22
 
 # Add the Entrypoint
