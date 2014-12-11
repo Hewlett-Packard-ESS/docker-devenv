@@ -26,6 +26,8 @@ function hcenter {
 export TERM='xterm-256color'
 hcenter "Welcome to the HP ESS Development Environment!"
 hcenter "**********************************************"
+. /root/.bashrc
+
 ROOT_PASSWORD=${ROOT_PASSWORD:-password}
 echo "root:$ROOT_PASSWORD" | chpasswd
 
