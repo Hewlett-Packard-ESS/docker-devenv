@@ -8,17 +8,36 @@ This container builds on hpess/base by adding a bunch of common dev environment 
 On it's own it isn't much use, it's designed to be the base for language specific dev environments, such as: 
  - https://github.com/Hewlett-Packard-ESS/docker-devenv-nodejs
 
+fig.yml:
 ```
-[root@jambr-dev docker-devenv]# docker run -i -t -p 1337:22 hpess/devenv
-                             Welcome to the HP ESS Development Environment!
-                             **********************************************
- => You did not specify a command to run, therefore starting supervisor and sshd
- => You can login via ssh with username: root, password: password
-2014-12-11 13:58:53,142 CRIT Set uid to user 0
-2014-12-11 13:58:53,142 WARN Included extra file "/etc/supervisord.d/sshd.service.conf" during parsing
-2014-12-11 13:58:53,166 INFO RPC interface 'supervisor' initialized
-2014-12-11 13:58:53,166 CRIT Server 'unix_http_server' running without any HTTP authentication checking
-2014-12-11 13:58:53,167 INFO supervisord started with pid 25
-2014-12-11 13:58:54,173 INFO spawned: 'sshd' with pid 28
-2014-12-11 13:58:55,266 INFO success: sshd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+devenv:
+  image: hpess/devenv
+  environment:
+    - ROOT_PASSWORD=secret
+  ports:
+    - '8022:22'
+```
+or in line:
+```
+docker run -p 8022:22 hpess/devenv
+```
+results in:
+```
+devenv_1 | ***************************************************
+devenv_1 | *  Welcome to the HP ESS Development Environment!  
+devenv_1 | ***************************************************
+devenv_1 |  => You did not specify a command to run, therefore starting supervisor and sshd
+devenv_1 |  => You can login via ssh with username: root, password: secret
+devenv_1 |  => Wemux users can login with username: devenv, password: devenv
+devenv_1 | 2014-12-11 16:38:44,898 CRIT Set uid to user 0
+devenv_1 | 2014-12-11 16:38:44,898 WARN Included extra file "/etc/supervisord.d/sshd.service.conf" during parsing
+devenv_1 | 2014-12-11 16:38:44,939 INFO RPC interface 'supervisor' initialized
+devenv_1 | 2014-12-11 16:38:44,939 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+devenv_1 | 2014-12-11 16:38:44,939 INFO supervisord started with pid 11
+devenv_1 | 2014-12-11 16:38:45,945 INFO spawned: 'sshd' with pid 14
+devenv_1 | 2014-12-11 16:38:47,110 INFO success: sshd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+```
+You can specify an exact command to run if you dont want to start sshd, etc
+```
+docker run hpess/devenv echo "hi"
 ```
