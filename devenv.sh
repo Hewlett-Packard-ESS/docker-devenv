@@ -1,5 +1,9 @@
 #!/bin/bash
-echo "HP ESS Development Environment"
-echo "Node Version: $(node --version)"
-echo "Ruby Version: $(ruby --version)"
+export TERM='xterm-256color'
+export PATH=./node_modules/.bin:$PATH
+source ~/.nvm/nvm.sh
+source ~/.bashrc
+nvm use 0.10
+echo "Now using $(ruby --version)"
+echo "Welcome to the HP ESS Development Environment!"
 /bin/bash
