@@ -17,12 +17,41 @@ RUN mkdir /var/run/sshd && \
     chmod 700 /home/devenv/.ssh
  
 # Install Wemux 
-RUN git clone git://github.com/zolrath/wemux.git /usr/local/share/wemux && \
+RUN git clone https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
     ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
 ADD wemux.conf /usr/local/etc/wemux.conf
 
 # Configure some other bits
-ADD .vimrc ~/.vimrc
+ADD .vimrc /root/.vimrc
+
+# Clone the vim stuff
+RUN mkdir -p /root/.vim/vim-addons && \
+    cd /root/.vim/vim-addons && \
+    git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager && \
+    git clone --depth=1 https://github.com/tpope/vim-fugitive fugitive && \
+    git clone --depth=1 https://github.com/airblade/vim-gitgutter github-airblade-vim-gitgutter && \
+    git clone --depth=1 https://github.com/editorconfig/editorconfig-vim github-editorconfig-editorconfig-vim && \
+    git clone --depth=1 https://github.com/geekjuice/vim-spec github-geekjuice-vim-spec && \
+    git clone --depth=1 https://github.com/nanotech/jellybeans.vim jellybeans && \
+    git clone --depth=1 https://github.com/tomasr/molokai.git && \
+    git clone --depth=1 https://github.com/sickill/vim-monokai github-sickill-vim-monokai && \
+    git clone --depth=1 https://github.com/Lokaltog/powerline && \
+    git clone --depth=1 https://github.com/garbas/vim-snipmate snipmate && \
+    git clone --depth=1 https://github.com/majutsushi/tagbar Tagbar && \
+    git clone --depth=1 https://github.com/scrooloose/nerdtree The_NERD_tree && \
+    git clone --depth=1 https://github.com/tomtom/tlib_vim tlib && \
+    git clone --depth=1 https://github.com/MarcWeber/vim-addon-commenting && \
+    git clone --depth=1 https://github.com/MarcWeber/vim-addon-mw-utils && \
+    git clone --depth=1 https://github.com/Chiel92/vim-autoformat && \
+    git clone --depth=1 https://bitbucket.org/vimcommunity/vim-pi && \
+    git clone --depth=1 https://github.com/honza/vim-snippets && \
+    git clone --depth=1 https://github.com/kristijanhusak/vim-multiple-cursors github-kristijanhusak-vim-multiple-cursors && \
+    git clone --depth=1 http://github.com/digitaltoad/vim-jade github-digitaltoad-vim-jade && \
+    git clone --depth=1 http://github.com/tpope/vim-cucumber github-tpope-vim-cucumber
+
+
+RUN mkdir -p /root/.vim/vim-addons/matchit.zip/archive/ && \
+    curl -L --max-redirs 40 -o '/root/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
 
 # Add the sshd service
 ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf
