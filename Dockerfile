@@ -2,7 +2,7 @@ FROM hpess/base:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
-RUN yum -y install vim git-core build-essential tmux openssh-server passwd gcc-c++ gcc make && \
+RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc make && \
     yum -y clean all
 
 # Install Wemux 
