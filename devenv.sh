@@ -1,11 +1,10 @@
 #!/bin/bash
-export TERM='xterm-256color'
 echo "****************************************************"
 echo "*  Welcome to the HP ESS Development Environment!  *"
 echo "****************************************************"
 
-ROOT_PASSWORD=${ROOT_PASSWORD:-password}
-echo "root:$ROOT_PASSWORD" | chpasswd
+PASSWORD=${PASSWORD:-password}
+echo "$PASSWORD" | sudo passwd --stdin devenv 2>&1 >/dev/null
 
 if [ "$#" -eq 0 ]; then
   # Check if this is a ssh connection
@@ -14,8 +13,7 @@ if [ "$#" -eq 0 ]; then
     /bin/sh -c $SSH_ORIGINAL_COMMAND
   else 
     echo " => You did not specify a command to run, therefore starting supervisor and sshd"
-    echo " => You can login via ssh with username: root, password: $ROOT_PASSWORD"
-    echo " => Wemux users can login with username: devenv, password: devenv"
+    echo " => You can login via ssh with username: devenv, password: $PASSWORD"
     supervisord -c /etc/supervisord.conf
   fi
 else

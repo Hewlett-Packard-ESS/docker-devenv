@@ -2,31 +2,25 @@ FROM hpess/base:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
-RUN yum -y install vim git-core build-essential tmux openssh-server && \
+RUN yum -y install vim git-core build-essential tmux openssh-server passwd gcc-c++ gcc make && \
     yum -y clean all
 
-# Configure sshd and wemux
+# Install Wemux 
+RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
+    ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
+
+# Confiire SSHD, wemux and devenv user
 RUN mkdir /var/run/sshd && \
     ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
     useradd devenv -G wheel && \
-    echo 'root:password' | chpasswd && \
-    echo 'devenv:devenv' | chpasswd && \
-    echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers && \
+    echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
     mkdir -p /home/devenv/.ssh && \ 
     chown -R devenv:devenv /home/devenv/.ssh && \
     chmod 700 /home/devenv/.ssh
- 
-# Install Wemux 
-RUN git clone https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
-    ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
-ADD wemux.conf /usr/local/etc/wemux.conf
-
-# Configure some other bits
-ADD .vimrc /root/.vimrc
 
 # Clone the vim stuff
-RUN mkdir -p /root/.vim/vim-addons && \
-    cd /root/.vim/vim-addons && \
+RUN mkdir -p /home/devenv/.vim/vim-addons && \
+    cd /home/devenv/.vim/vim-addons && \
     git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager && \
     git clone --depth=1 https://github.com/tpope/vim-fugitive fugitive && \
     git clone --depth=1 https://github.com/airblade/vim-gitgutter github-airblade-vim-gitgutter && \
@@ -49,9 +43,14 @@ RUN mkdir -p /root/.vim/vim-addons && \
     git clone --depth=1 http://github.com/digitaltoad/vim-jade github-digitaltoad-vim-jade && \
     git clone --depth=1 http://github.com/tpope/vim-cucumber github-tpope-vim-cucumber
 
+RUN mkdir -p /home/devenv/.vim/vim-addons/matchit.zip/archive/ && \
+    curl -L --max-redirs 40 -o '/home/devenv/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
 
-RUN mkdir -p /root/.vim/vim-addons/matchit.zip/archive/ && \
-    curl -L --max-redirs 40 -o '/root/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
+# Add wemux config
+ADD wemux.conf /usr/local/etc/wemux.conf
+
+# Configure some other bits
+ADD .vimrc /home/devenv/.vimrc
 
 # Add the sshd service
 ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf

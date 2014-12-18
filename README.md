@@ -13,7 +13,7 @@ fig.yml:
 devenv:
   image: hpess/devenv
   environment:
-    - ROOT_PASSWORD=secret
+    - PASSWORD=secret
   ports:
     - '8022:22'
 ```
@@ -27,8 +27,7 @@ devenv_1 | ***************************************************
 devenv_1 | *  Welcome to the HP ESS Development Environment!  
 devenv_1 | ***************************************************
 devenv_1 |  => You did not specify a command to run, therefore starting supervisor and sshd
-devenv_1 |  => You can login via ssh with username: root, password: secret
-devenv_1 |  => Wemux users can login with username: devenv, password: devenv
+devenv_1 |  => You can login via ssh with username: devenv, password: secret
 devenv_1 | 2014-12-11 16:38:44,898 CRIT Set uid to user 0
 devenv_1 | 2014-12-11 16:38:44,898 WARN Included extra file "/etc/supervisord.d/sshd.service.conf" during parsing
 devenv_1 | 2014-12-11 16:38:44,939 INFO RPC interface 'supervisor' initialized
