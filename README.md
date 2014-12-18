@@ -15,7 +15,7 @@ devenv:
   environment:
     - PASSWORD=secret
   ports:
-    - '8022:22'
+    - '22:8022'
 ```
 or in line:
 ```

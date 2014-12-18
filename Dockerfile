@@ -55,7 +55,10 @@ ADD .vimrc /home/devenv/.vimrc
 # Add the sshd service
 ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf
 RUN echo "ForceCommand /usr/bin/devenv.sh" >> /etc/ssh/sshd_config
-EXPOSE 22
+
+# Make SSH listen on a non standard port
+RUN echo 'Port 2022' >> /etc/ssh/sshd_config
+EXPOSE 2022
 
 # Add the Entrypoint
 ADD devenv.sh /usr/bin/devenv.sh
