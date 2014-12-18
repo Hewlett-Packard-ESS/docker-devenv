@@ -40,3 +40,4 @@ You can specify an exact command to run if you dont want to start sshd, etc
 ```
 docker run hpess/devenv echo "hi"
 ```
+Sudo is installed and devenv has unlimited unpassworded access.
