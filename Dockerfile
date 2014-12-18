@@ -9,14 +9,11 @@ RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc 
 RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
     ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
 
-# Confiire SSHD, wemux and devenv user
-RUN mkdir /var/run/sshd && \
+# Configure SSHD and add the wheel group to the sudoers, and add devenv to that group
+RUN mkdir -p /var/run/sshd && \
     ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
     useradd devenv -G wheel && \
-    echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
-    mkdir -p /home/devenv/.ssh && \ 
-    chown -R devenv:devenv /home/devenv/.ssh && \
-    chmod 700 /home/devenv/.ssh
+    echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Clone the vim stuff
 RUN mkdir -p /home/devenv/.vim/vim-addons && \
@@ -55,6 +52,11 @@ ADD .vimrc /home/devenv/.vimrc
 # Add the sshd service
 ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf
 RUN echo "ForceCommand /usr/bin/devenv.sh" >> /etc/ssh/sshd_config
+
+# Fix any permissions
+RUN mkdir -p /home/devenv/.ssh && \ 
+    chown -R devenv:devenv /home/devenv && \
+    chmod 700 /home/devenv/.ssh
 
 # Make SSH listen on a non standard port
 RUN echo 'Port 2022' >> /etc/ssh/sshd_config
