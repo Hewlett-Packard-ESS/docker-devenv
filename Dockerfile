@@ -45,6 +45,7 @@ RUN mkdir -p /home/devenv/.vim/vim-addons/matchit.zip/archive/ && \
 
 # Add wemux config
 ADD wemux.conf /usr/local/etc/wemux.conf
+ADD .tmux.conf /home/devenv/.tmux.conf
 
 # Configure some other bits
 ADD .vimrc /home/devenv/.vimrc
