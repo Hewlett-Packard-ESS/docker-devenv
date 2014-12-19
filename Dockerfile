@@ -63,6 +63,9 @@ RUN mkdir -p /home/devenv/.ssh && \
 RUN echo 'Port 2022' >> /etc/ssh/sshd_config
 EXPOSE 2022
 
+# Add a wemux user
+RUN useradd wemux
+
 # Add the Entrypoint
 ADD devenv.sh /usr/bin/devenv.sh
 ENTRYPOINT ["/usr/bin/devenv.sh"]
