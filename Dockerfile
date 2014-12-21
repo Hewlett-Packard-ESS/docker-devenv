@@ -1,9 +1,21 @@
 FROM hpess/base:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
-# Install core development tools 
-RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc make && \
+# Install core development tools, second line is to build git from source
+RUN yum -y install vim autoconf build-essential tmux openssh-server gcc-c++ gcc make && \
+    yum -y install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker && \
     yum -y clean all
+
+# Install git from source
+RUN cd /tmp && \
+    wget -q https://www.kernel.org/pub/software/scm/git/git-2.2.1.tar.gz && \
+    tar -zxf git-2.2.1.tar.gz && \
+    cd git-2.2.1 && \
+    make configure && \
+    ./configure --prefix=/usr/local && \
+    make install && \
+    rm -rf /tmp/git-2.2.1.tar.gz && \
+    rm -rf /tmp/git-2.2.1
 
 # Install Wemux 
 RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
