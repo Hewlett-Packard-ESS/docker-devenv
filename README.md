@@ -11,7 +11,10 @@ On it's own it isn't much use, it's designed to be the base for language specifi
 You need to configure the environment with environment variables.  Personally the easiest way to do this is with a fig file:
 ```
 devenv:
+  hostname: 'devenv'
   image: hpess/devenv
+  ports:
+    - "2022:2022"
   environment:
     devenv_password: 'password'
     devenv_wemux_password: 'password'
