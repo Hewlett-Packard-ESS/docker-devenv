@@ -1,5 +1,8 @@
 devenv:
+  hostname: 'devenv'
   image: hpess/devenv
+  ports:
+    - "2022:2022"
   environment:
     devenv_password: 'password'
     devenv_wemux_password: 'password'
