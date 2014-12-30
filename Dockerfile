@@ -41,7 +41,7 @@ RUN mkdir -p /home/devenv/.vim/vim-addons && \
     curl --silent -L --max-redirs 40 -o '/home/devenv/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
 
 # Make SSH listen on a non standard port
-RUN echo 'Port 2022' >> /etc/ssh/sshd_config
+COPY sshd_config /etc/ssh/sshd_config
 EXPOSE 2022
 
 # Setup sshd
