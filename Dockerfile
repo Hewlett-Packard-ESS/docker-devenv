@@ -1,4 +1,4 @@
-FROM hpess/base:latest
+FROM hpess/chef:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
@@ -55,6 +55,10 @@ COPY wemux.conf /usr/local/etc/wemux.conf
 COPY preboot/* /preboot/
 COPY services/* /etc/supervisord.d/
 COPY home/* /home/devenv/
+COPY cookbooks/ /chef/cookbooks/
+
+ENV chef_node_name devenv.docker.local
+ENV chef_run_list git
 
 # Fix any permissions
 RUN mkdir -p /home/devenv/.ssh && \ 

@@ -3,10 +3,10 @@ echo "****************************************************"
 echo "*  Welcome to the HP ESS Development Environment!  *"
 echo "****************************************************"
 
-PASSWORD=${PASSWORD:-password}
-WEMUX_PASSWORD=${WEMUX_PASSWORD:-wemux}
-echo "$PASSWORD" | sudo passwd --stdin devenv 2>&1 >/dev/null
-echo "$WEMUX_PASSWORD" | sudo passwd --stdin wemux 2>&1 >/dev/null
+devenv_password=${devenv_password:-password}
+devenv_wemux_password=${devenv_wemux_password:-wemux}
+echo "$devenv_password" | sudo passwd --stdin devenv 2>&1 >/dev/null
+echo "$devenv_wemux_password" | sudo passwd --stdin wemux 2>&1 >/dev/null
 
-echo " => Primary logon username: devenv, password: $PASSWORD"
-echo " => Wemux logon username: wemux, password: $WEMUX_PASSWORD"
+echo " => Primary logon username: devenv, password: $devenv_password"
+echo " => Wemux logon username: wemux, password: $devenv_wemux_password"

@@ -1,0 +1,8 @@
+devenv:
+  image: hpess/devenv
+  environment:
+    devenv_password: 'password'
+    devenv_wemux_password: 'password'
+    git_name: "Mr Example"
+    git_email: "mr.example@domain.com"
+    git_ssl_verify: "false"

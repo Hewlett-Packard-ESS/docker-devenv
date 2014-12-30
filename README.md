@@ -8,38 +8,32 @@ This container builds on hpess/base by adding a bunch of common dev environment 
 On it's own it isn't much use, it's designed to be the base for language specific dev environments, such as: 
  - https://github.com/Hewlett-Packard-ESS/docker-devenv-nodejs
 
-fig.yml:
+You need to configure the environment with environment variables.  Personally the easiest way to do this is with a fig file:
 ```
 devenv:
   image: hpess/devenv
   environment:
-    - PASSWORD=secret
-    - WEMUX_PASSWORD=secret
-  ports:
-    - '22:2022'
+    devenv_password: 'password'
+    devenv_wemux_password: 'password'
+    git_name: "Mr Example"
+    git_email: "mr.example@domain.com"
+    git_ssl_verify: "false"
 ```
-or in line:
+Then typing `sudo fig --rm run devenv` results in:
 ```
-docker run -p 8022:22 hpess/devenv
+****************************************************
+*  Welcome to the HP ESS Development Environment!  *
+****************************************************
+ => Primary logon username: devenv, password: password
+ => Wemux logon username: wemux, password: wemux
 ```
-results in:
+From there you can SSH into the container, it's listening by default on 2022.
+
+## No SSH
+If you're not wanting to use SSH to get into the container, you can specify an exact command to run if you dont want to start sshd, etc
 ```
-devenv_1 | ***************************************************
-devenv_1 | *  Welcome to the HP ESS Development Environment!  
-devenv_1 | ***************************************************
-devenv_1 |  => You did not specify a command to run, therefore starting supervisor and sshd
-devenv_1 |  => You can login via ssh with username: devenv, password: secret
-devenv_1 |  => Wemux users can login with username: wemux, password: secret
-devenv_1 | 2014-12-11 16:38:44,898 CRIT Set uid to user 0
-devenv_1 | 2014-12-11 16:38:44,898 WARN Included extra file "/etc/supervisord.d/sshd.service.conf" during parsing
-devenv_1 | 2014-12-11 16:38:44,939 INFO RPC interface 'supervisor' initialized
-devenv_1 | 2014-12-11 16:38:44,939 CRIT Server 'unix_http_server' running without any HTTP authentication checking
-devenv_1 | 2014-12-11 16:38:44,939 INFO supervisord started with pid 11
-devenv_1 | 2014-12-11 16:38:45,945 INFO spawned: 'sshd' with pid 14
-devenv_1 | 2014-12-11 16:38:47,110 INFO success: sshd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+sudo fig --rm run devenv echo "hi"
 ```
-You can specify an exact command to run if you dont want to start sshd, etc
-```
-docker run hpess/devenv echo "hi"
-```
-Sudo is installed and devenv has unlimited unpassworded access.
+
+## Sudo/Admin
+Sudo is installed and devenv has ALL unpassworded access.
