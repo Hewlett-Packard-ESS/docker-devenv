@@ -9,11 +9,9 @@ RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc 
 RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
     ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
 
-# Configure SSHD and add the wheel group to the sudoers, and add devenv to that group
-RUN mkdir -p /var/run/sshd && \
-    ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
-    useradd devenv -G wheel && \
-    echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+# Create our devenv and wemux users
+RUN useradd devenv -G wheel && \
+    useradd wemux
 
 # Clone the vim stuff
 RUN mkdir -p /home/devenv/.vim/vim-addons && \
@@ -38,34 +36,27 @@ RUN mkdir -p /home/devenv/.vim/vim-addons && \
     git clone --depth=1 https://github.com/honza/vim-snippets && \
     git clone --depth=1 https://github.com/kristijanhusak/vim-multiple-cursors github-kristijanhusak-vim-multiple-cursors && \
     git clone --depth=1 http://github.com/digitaltoad/vim-jade github-digitaltoad-vim-jade && \
-    git clone --depth=1 http://github.com/tpope/vim-cucumber github-tpope-vim-cucumber
-
-RUN mkdir -p /home/devenv/.vim/vim-addons/matchit.zip/archive/ && \
-    curl -L --max-redirs 40 -o '/home/devenv/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
-
-# Add wemux config
-ADD wemux.conf /usr/local/etc/wemux.conf
-ADD .tmux.conf /home/devenv/.tmux.conf
-
-# Configure some other bits
-ADD .vimrc /home/devenv/.vimrc
-
-# Add the sshd service
-ADD sshd.service.conf /etc/supervisord.d/sshd.service.conf
-RUN echo "ForceCommand /usr/bin/devenv.sh" >> /etc/ssh/sshd_config
-
-# Fix any permissions
-RUN mkdir -p /home/devenv/.ssh && \ 
-    chown -R devenv:devenv /home/devenv && \
-    chmod 700 /home/devenv/.ssh
+    git clone --depth=1 http://github.com/tpope/vim-cucumber github-tpope-vim-cucumber && \
+    mkdir -p /home/devenv/.vim/vim-addons/matchit.zip/archive/ && \
+    curl --silent -L --max-redirs 40 -o '/home/devenv/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
 
 # Make SSH listen on a non standard port
 RUN echo 'Port 2022' >> /etc/ssh/sshd_config
 EXPOSE 2022
 
-# Add a wemux user
-RUN useradd wemux
+# Setup sshd
+RUN mkdir -p /var/run/sshd && \
+    ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
+    ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key && \
+    echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-# Add the Entrypoint
-ADD devenv.sh /usr/bin/devenv.sh
-ENTRYPOINT ["/usr/bin/devenv.sh"]
+# Copy over configurations, services etc.
+COPY wemux.conf /usr/local/etc/wemux.conf
+COPY preboot/* /preboot/
+COPY services/* /etc/supervisord.d/
+COPY home/* /home/devenv/
+
+# Fix any permissions
+RUN mkdir -p /home/devenv/.ssh && \ 
+    chown -R devenv:devenv /home/devenv && \
+    chmod 700 /home/devenv/.ssh
