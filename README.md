@@ -19,7 +19,7 @@ devenv:
     git_email: "mr.example@domain.com"
     git_ssl_verify: "false"
 ```
-Then typing `sudo fig --rm run devenv` results in:
+Then typing `sudo fig up devenv` results in:
 ```
 ****************************************************
 *  Welcome to the HP ESS Development Environment!  *
