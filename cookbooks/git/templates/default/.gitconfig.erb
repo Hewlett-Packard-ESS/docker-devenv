@@ -3,7 +3,7 @@
   email = <%= @confvars[:email] %>
 [push]
   default = simple
-<% if @confvars[:sslVerify] == false %>
+<% if @confvars[:sslVerify] === false %>
 [http]
   sslVerify = false
 <% end %>
