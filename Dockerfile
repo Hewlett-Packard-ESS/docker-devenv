@@ -57,10 +57,17 @@ COPY services/* /etc/supervisord.d/
 COPY home/* /home/devenv/
 COPY cookbooks/ /chef/cookbooks/
 
-ENV chef_node_name devenv.docker.local
-ENV chef_run_list git
+# Download git-promt for the funky shell
+RUN curl --silent -o /etc/profile.d/git-prompt.sh \
+    https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh && \
+    chmod +x /etc/profile.d/git-prompt.sh
 
 # Fix any permissions
 RUN mkdir -p /home/devenv/.ssh && \ 
     chown -R devenv:devenv /home/devenv && \
     chmod 700 /home/devenv/.ssh
+
+# Environmental setup
+ENV chef_node_name devenv.docker.local
+ENV chef_run_list git
+ENV HPESS_ENV devenv
