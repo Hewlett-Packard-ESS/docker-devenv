@@ -9,13 +9,13 @@ RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc 
 RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
     ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
 
-# Create our devenv and wemux users
-RUN useradd devenv -G wheel && \
+# Add the hpess user to the wheel group
+RUN usermod -a -G wheel hpess && \ 
     useradd wemux
 
 # Clone the vim stuff
-RUN mkdir -p /home/devenv/.vim/vim-addons && \
-    cd /home/devenv/.vim/vim-addons && \
+RUN mkdir -p /home/hpess/.vim/vim-addons && \
+    cd /home/hpess/.vim/vim-addons && \
     git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager && \
     git clone --depth=1 https://github.com/tpope/vim-fugitive fugitive && \
     git clone --depth=1 https://github.com/airblade/vim-gitgutter github-airblade-vim-gitgutter && \
@@ -37,8 +37,8 @@ RUN mkdir -p /home/devenv/.vim/vim-addons && \
     git clone --depth=1 https://github.com/kristijanhusak/vim-multiple-cursors github-kristijanhusak-vim-multiple-cursors && \
     git clone --depth=1 http://github.com/digitaltoad/vim-jade github-digitaltoad-vim-jade && \
     git clone --depth=1 http://github.com/tpope/vim-cucumber github-tpope-vim-cucumber && \
-    mkdir -p /home/devenv/.vim/vim-addons/matchit.zip/archive/ && \
-    curl --silent -L --max-redirs 40 -o '/home/devenv/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
+    mkdir -p /home/hpess/.vim/vim-addons/matchit.zip/archive/ && \
+    curl --silent -L --max-redirs 40 -o '/home/hpess/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
 
 # Make SSH listen on a non standard port
 COPY sshd_config /etc/ssh/sshd_config
@@ -50,22 +50,22 @@ RUN mkdir -p /var/run/sshd && \
     ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key && \
     echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-# Copy over configurations, services etc.
-COPY wemux.conf /usr/local/etc/wemux.conf
-COPY preboot/* /preboot/
-COPY services/* /etc/supervisord.d/
-COPY home/* /home/devenv/
-COPY cookbooks/ /chef/cookbooks/
-
 # Download git-promt for the funky shell
 RUN curl --silent -o /etc/profile.d/git-prompt.sh \
     https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh && \
     chmod +x /etc/profile.d/git-prompt.sh
 
 # Fix any permissions
-RUN mkdir -p /home/devenv/.ssh && \ 
-    chown -R devenv:devenv /home/devenv && \
-    chmod 700 /home/devenv/.ssh
+COPY home/* /home/hpess/
+RUN mkdir -p /home/hpess/.ssh && \ 
+    chown -R hpess:hpess /home/hpess && \
+    chmod 700 /home/hpess/.ssh
+
+# Copy over configurations, services etc.
+COPY wemux.conf /usr/local/etc/wemux.conf
+COPY preboot/* /preboot/
+COPY services/* /etc/supervisord.d/
+COPY cookbooks/ /chef/cookbooks/
 
 # Environmental setup
 ENV chef_node_name devenv.docker.local

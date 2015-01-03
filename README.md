@@ -27,7 +27,7 @@ Then typing `sudo fig up devenv` results in:
 ****************************************************
 *  Welcome to the HP ESS Development Environment!  *
 ****************************************************
- => Primary logon username: devenv, password: password
+ => Primary logon username: hpess, password: password
  => Wemux logon username: wemux, password: wemux
 ```
 From there you can SSH into the container, it's listening by default on 2022.
@@ -39,4 +39,4 @@ sudo fig --rm run devenv echo "hi"
 ```
 
 ## Sudo/Admin
-Sudo is installed and devenv has ALL unpassworded access.
+Sudo is installed and the hpess user has ALL password-less access.

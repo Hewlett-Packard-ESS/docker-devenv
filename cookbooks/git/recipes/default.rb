@@ -20,9 +20,9 @@ gitConfig = {
   :sslVerify => default_value(ENV['git_ssl_verify'], true)
 }
 
-template '/home/devenv/.gitconfig' do
+template '/home/hpess/.gitconfig' do
   source '.gitconfig.erb'
-  user 'devenv'
-  group 'devenv'
+  user 'hpess'
+  group 'hpess'
   variables ({ :confvars => gitConfig })
 end
