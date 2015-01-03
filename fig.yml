@@ -1,6 +1,8 @@
 devenv:
   hostname: 'devenv'
   image: hpess/devenv
+  volumes:
+    - ./storage:/storage
   ports:
     - "2022:2022"
   environment:
