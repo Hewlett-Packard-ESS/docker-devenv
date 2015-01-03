@@ -10,12 +10,12 @@ RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/we
     ln -s /usr/local/share/wemux/wemux /usr/local/bin/wemux
 
 # Add the hpess user to the wheel group
-RUN usermod -a -G wheel hpess && \ 
+RUN usermod -a -G wheel docker && \ 
     useradd wemux
 
 # Clone the vim stuff
-RUN mkdir -p /home/hpess/.vim/vim-addons && \
-    cd /home/hpess/.vim/vim-addons && \
+RUN mkdir -p /home/docker/.vim/vim-addons && \
+    cd /home/docker/.vim/vim-addons && \
     git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager && \
     git clone --depth=1 https://github.com/tpope/vim-fugitive fugitive && \
     git clone --depth=1 https://github.com/airblade/vim-gitgutter github-airblade-vim-gitgutter && \
@@ -37,8 +37,8 @@ RUN mkdir -p /home/hpess/.vim/vim-addons && \
     git clone --depth=1 https://github.com/kristijanhusak/vim-multiple-cursors github-kristijanhusak-vim-multiple-cursors && \
     git clone --depth=1 http://github.com/digitaltoad/vim-jade github-digitaltoad-vim-jade && \
     git clone --depth=1 http://github.com/tpope/vim-cucumber github-tpope-vim-cucumber && \
-    mkdir -p /home/hpess/.vim/vim-addons/matchit.zip/archive/ && \
-    curl --silent -L --max-redirs 40 -o '/home/hpess/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
+    mkdir -p /home/docker/.vim/vim-addons/matchit.zip/archive/ && \
+    curl --silent -L --max-redirs 40 -o '/home/docker/.vim/vim-addons/matchit.zip/archive/matchit.zip' 'http://www.vim.org/scripts/download_script.php?src_id=8196'
 
 # Make SSH listen on a non standard port
 COPY sshd_config /etc/ssh/sshd_config
@@ -56,10 +56,10 @@ RUN curl --silent -o /etc/profile.d/git-prompt.sh \
     chmod +x /etc/profile.d/git-prompt.sh
 
 # Fix any permissions
-COPY home/* /home/hpess/
-RUN mkdir -p /home/hpess/.ssh && \ 
-    chown -R hpess:hpess /home/hpess && \
-    chmod 700 /home/hpess/.ssh
+COPY home/* /home/docker/
+RUN mkdir -p /home/docker/.ssh && \ 
+    chown -R docker:docker /home/docker && \
+    chmod 700 /home/docker/.ssh
 
 # Copy over configurations, services etc.
 COPY wemux.conf /usr/local/etc/wemux.conf

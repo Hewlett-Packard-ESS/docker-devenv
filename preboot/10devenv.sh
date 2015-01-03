@@ -6,9 +6,9 @@ if [ "$#" -eq 0 ]; then
 
   devenv_password=${devenv_password:-password}
   devenv_wemux_password=${devenv_wemux_password:-wemux}
-  echo "$devenv_password" | passwd --stdin hpess 2>&1 >/dev/null
+  echo "$devenv_password" | passwd --stdin docker 2>&1 >/dev/null
   echo "$devenv_wemux_password" | passwd --stdin wemux 2>&1 >/dev/null
 
-  echo " => Primary logon username: hpess, password: $devenv_password"
+  echo " => Primary logon username: docker, password: $devenv_password"
   echo " => Wemux logon username: wemux, password: $devenv_wemux_password"
 fi

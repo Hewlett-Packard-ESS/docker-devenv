@@ -20,9 +20,9 @@ gitConfig = {
   :sslVerify => default_value(ENV['git_ssl_verify'], true)
 }
 
-template '/home/hpess/.gitconfig' do
+template '/home/docker/.gitconfig' do
   source '.gitconfig.erb'
-  user 'hpess'
-  group 'hpess'
+  user 'docker'
+  group 'docker'
   variables ({ :confvars => gitConfig })
 end
