@@ -2,7 +2,7 @@ FROM hpess/chef:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
-RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc make && \
+RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
     yum -y clean all
 
 # Install Wemux 
@@ -66,6 +66,9 @@ COPY wemux.conf /usr/local/etc/wemux.conf
 COPY preboot/* /preboot/
 COPY services/* /etc/supervisord.d/
 COPY cookbooks/ /chef/cookbooks/
+
+# Setup rsyslog to allow local logging
+COPY rsyslog.conf /etc/rsyslog.conf
 
 # Environmental setup
 ENV chef_node_name devenv.docker.local
