@@ -2,7 +2,7 @@ FROM hpess/chef:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
-RUN yum -y install vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
+RUN yum -y install tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
     yum -y clean all
 
 # Install Wemux 
@@ -12,6 +12,9 @@ RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/we
 # Add the hpess user to the wheel group
 RUN usermod -a -G wheel docker && \ 
     useradd wemux
+
+# Install httpie
+RUN pip install --upgrade httpie
 
 # Clone the vim stuff
 RUN mkdir -p /home/docker/.vim/vim-addons && \
