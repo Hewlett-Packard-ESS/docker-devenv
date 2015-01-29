@@ -17,9 +17,11 @@ RUN usermod -a -G wheel docker && \
 RUN pip install --upgrade httpie
 
 # Add gitflow
-RUN curl -sLkO https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh && \
+RUN cd /usr/local/src && \
+    curl -sLkO https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh && \
     chmod +x gitflow-installer.sh && \
-    ./gitflow-installer.sh
+    ./gitflow-installer.sh && \
+    rm -rf /usr/local/src/gitflow*
 
 # Clone the vim stuff
 RUN mkdir -p /home/docker/.vim/vim-addons && \
