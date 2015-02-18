@@ -47,6 +47,8 @@ set incsearch
 set hlsearch
 
 nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <silent> [b :bprevious<CR>                                         
+nnoremap <silent> ]b :bnext<CR> 
 
 set foldenable
 set foldlevelstart=10
