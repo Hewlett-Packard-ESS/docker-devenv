@@ -66,6 +66,9 @@ nmap <silent> <C-D> :NERDTreeToggle<CR>
 nmap <silent> <C-E> :TagbarToggle<CR>
 let g:NERDTreeDirArrows=0
 
+"This is useful if you want to press Escape and go back to Normal mode, and still be able to operate on all the cursors.
+let g:multi_cursor_exit_from_insert_mode=0
+
 "map <Leader>t :call RunCurrentSpecFile()<CR>
 "map <Leader>s :call RunNearestSpec()<CR>
 "map <Leader>l :call RunLastSpec()<CR>
