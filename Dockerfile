@@ -3,7 +3,6 @@ MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
 RUN yum -y -q install ctags tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
-    yum -y -q autoremove && \
     yum -y -q clean all
 
 # Install Wemux 
