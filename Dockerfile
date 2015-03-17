@@ -2,9 +2,9 @@ FROM hpess/chef:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
-RUN yum -y install ctags tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
-    yum -y autoremove && \
-    yum -y clean all
+RUN yum -y -q install ctags tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
+    yum -y -q autoremove && \
+    yum -y -q clean all
 
 # Install Wemux 
 RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
