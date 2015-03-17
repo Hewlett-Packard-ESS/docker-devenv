@@ -3,6 +3,7 @@ MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
 RUN yum -y install ctags tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
+    yum -y autoremove && \
     yum -y clean all
 
 # Install Wemux 
@@ -14,7 +15,7 @@ RUN usermod -a -G wheel docker && \
     useradd wemux
 
 # Install httpie
-RUN pip install --upgrade httpie
+RUN easy_install httpie
 
 # Add gitflow
 RUN cd /usr/local/src && \
