@@ -2,8 +2,9 @@ FROM hpess/chef:latest
 MAINTAINER Karl Stoney <karl.stoney@hp.com>
 
 # Install core development tools 
-RUN yum -y install ctags tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
-    yum -y clean all
+RUN yum -y -q install ctags tidy vim git-core build-essential tmux openssh-server gcc-c++ gcc make rsyslog net-tools bind-utils telnet && \
+    yum -y -q autoremove && \
+    yum -y -q clean all
 
 # Install Wemux 
 RUN git clone --depth=1 https://github.com/zolrath/wemux.git /usr/local/share/wemux && \
@@ -14,7 +15,14 @@ RUN usermod -a -G wheel docker && \
     useradd wemux
 
 # Install httpie
-RUN pip install --upgrade httpie
+RUN easy_install httpie
+
+# Add gitflow
+RUN cd /usr/local/src && \
+    curl -sLkO https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh && \
+    chmod +x gitflow-installer.sh && \
+    ./gitflow-installer.sh && \
+    rm -rf /usr/local/src/gitflow*
 
 # Clone the vim stuff
 RUN mkdir -p /home/docker/.vim/vim-addons && \
