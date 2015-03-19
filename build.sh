@@ -1,1 +1,1 @@
-sudo docker build -t hpess/devenv:latest .
+docker build -t hpess/devenv:master .
